@@ -3,7 +3,7 @@ import urllib.request
 
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "qwen2.5:7b"
+MODEL = "qwen2.5:14b"
 
 
 def check_quality(script):
@@ -14,47 +14,84 @@ def check_quality(script):
     )
 
     prompt = f"""
-Sen katı ve detaycı bir Türkçe kurumsal video editörüsün.
-Görevin senaryoyu onaylamak değil, gerçek kalite sorunlarını bulmaktır.
+Sen katı ama adil bir Türkçe video metni editörüsün.
 
-Aşağıdaki senaryoyu dikkatlice incele:
+Aşağıdaki kısa kurumsal video senaryosunu incele:
 
 {script_json}
 
-Aşağıdaki durumlardan HERHANGİ BİRİ varsa senaryoyu REDDET:
+Senaryoyu değerlendirirken TEK SEFERDE genel bir izlenim verme.
 
-1. Yazım veya dil bilgisi hatası.
-2. Doğal olmayan, bozuk veya anlamsız Türkçe.
-3. Giriş, sahneler veya kapanış arasında belirgin tekrar.
-4. Profesyonel kurumsal anlatıma uymayan ifadeler.
-5. Görsel açıklamasında belirsiz veya anlamsız ifade.
-6. Seslendirme metninde yapay veya kötü kurulmuş cümle.
-7. [Adınız], [Firma Adı] gibi yer tutucular.
-8. Kaynağı olmayan kesin yüzde, istatistik veya şirket iddiası.
-9. Videonun sonunda "bu videoyu izleyin" gibi bağlama uymayan çağrı.
-10. Anlatımın konu dışına çıkması veya kendi içinde çelişmesi.
+Önce aşağıdaki alanların HER BİRİNİ ayrı ayrı kontrol et:
 
-ÖNEMLİ:
-- Küçük görünen dil hatalarını bile görmezden gelme.
-- Şüpheli bir cümle varsa onay vermek yerine sorun olarak bildir.
-- "approved": true yalnızca senaryo gerçekten temiz,
-  doğal, tutarlı ve profesyonelse kullanılmalı.
-- Sorunları Türkçe ve kısa şekilde açıkla.
-- Senaryoyu yeniden yazma.
-- Yalnızca geçerli JSON döndür.
-- JSON dışında hiçbir metin yazma.
+1. title
+2. introduction
+3. scene 1 visual
+4. scene 1 narration
+5. scene 2 visual
+6. scene 2 narration
+7. scene 3 visual
+8. scene 3 narration
+9. closing
 
-ÇIKTI FORMATI:
+HER ALANDA ŞUNLARI KONTROL ET:
+
+- Cümle Türkçe dil bilgisine uygun mu?
+- Cümle doğal bir Türkçe ile yazılmış mı?
+- Anlam açık mı?
+- Kelimeler yanlış veya garip şekilde kullanılmış mı?
+- Cümle yarım veya bozuk mu?
+- Özne, yüklem ve ekler birbiriyle uyumlu mu?
+
+ÖRNEK OLARAK ŞU TÜR CÜMLELER MUTLAKA HATA SAYILMALIDIR:
+
+"Bu işlerin yapay zekanın desteklemesiyle nasıl daha verimli hale gelmesi?"
+
+Bu bozuk bir Türkçe cümledir ve REDDEDİLMELİDİR.
+
+"Bu, iş dünyasının geleceğinin nasıl şekillendiği bir göstergesidir."
+
+Bu doğal ve doğru kurulmuş bir Türkçe cümle değildir ve REDDEDİLMELİDİR.
+
+BUNLARIN DIŞINDA ŞUNLARI DA KONTROL ET:
+
+- Giriş, sahneler ve kapanış arasında belirgin tekrar.
+- Görsel ile seslendirme arasında ciddi uyumsuzluk.
+- Konu dışına çıkan ifadeler.
+- Kendi içinde çelişen anlatım.
+- Uydurulmuş şirket, kişi, araştırma, yüzde veya istatistik.
+- Köşeli parantezli yer tutucular.
+- Profesyonel bir videoda açıkça kötü görünecek ifadeler.
+
+ANCAK ŞUNLARI HATA SAYMA:
+
+- Görsel açıklamasının daha ayrıntılı yazılabilecek olması.
+- Küçük stil tercihleri.
+- Aynı fikrin farklı kelimelerle doğal biçimde desteklenmesi.
+- Zorunlu olmayan ayrıntıların bulunmaması.
+- Senaryonun sinematik veya kusursuz olmaması.
+
+ÇOK ÖNEMLİ:
+
+Bir alanın Türkçesi bozuksa, senaryonun genel anlamı anlaşılabiliyor olsa bile
+"approved": true verme.
+
+Önce tüm alanları tek tek zihninde kontrol et.
+Sonra yalnızca nihai JSON sonucunu döndür.
+
+Senaryoyu yeniden yazma.
+JSON dışında hiçbir açıklama yazma.
+
+Sorun varsa:
 
 {{
   "approved": false,
   "issues": [
-    "Tespit edilen sorun 1",
-    "Tespit edilen sorun 2"
+    "Sorunun bulunduğu alan ve kısa açıklaması"
   ]
 }}
 
-Hiçbir sorun yoksa:
+Gerçekten önemli hiçbir sorun yoksa:
 
 {{
   "approved": true,

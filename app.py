@@ -3,6 +3,7 @@ import json
 from engine.script_generator import generate_script
 from engine.validator import validate_script
 from engine.quality_checker import check_quality
+from engine.script_reviser import revise_script
 
 
 MAX_ATTEMPTS = 3
@@ -14,12 +15,11 @@ def main():
 
     topic = input("Video konusu gir: ")
 
-    feedback = None
+    print("\nAI ilk senaryoyu hazirliyor...\n")
+    script = generate_script(topic)
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        print(f"\nAI senaryoyu hazirliyor... ({attempt}/{MAX_ATTEMPTS})\n")
-
-        script = generate_script(topic, feedback)
+        print(f"Kontrol dongusu: {attempt}/{MAX_ATTEMPTS}\n")
 
         is_valid, errors = validate_script(script)
 
@@ -29,14 +29,13 @@ def main():
             for error in errors:
                 print(f"- {error}")
 
-            feedback = "\n".join(errors)
+            if attempt == MAX_ATTEMPTS:
+                print("\nMaksimum duzeltme sayisina ulasildi.")
+                return
 
-            if attempt < MAX_ATTEMPTS:
-                print("\nHatalar AI'a geri gonderiliyor. Yeniden deneniyor...")
-                continue
-
-            print("\nMaksimum deneme sayisina ulasildi.")
-            return
+            print("\nSenaryo AI tarafindan duzeltiliyor...\n")
+            script = revise_script(script, errors)
+            continue
 
         print("Yapisal dogrulama basarili.")
         print("AI kalite kontrolu yapiliyor...\n")
@@ -51,14 +50,15 @@ def main():
             for issue in issues:
                 print(f"- {issue}")
 
-            feedback = "\n".join(issues)
+            if attempt == MAX_ATTEMPTS:
+                print("\nMaksimum duzeltme sayisina ulasildi.")
+                return
 
-            if attempt < MAX_ATTEMPTS:
-                print("\nKalite sorunlari AI'a geri gonderiliyor. Yeniden deneniyor...")
-                continue
+            print("\nCritic sorunlari Reviser'a gonderiliyor...")
+            print("Senaryo AI tarafindan duzeltiliyor...\n")
 
-            print("\nMaksimum deneme sayisina ulasildi.")
-            return
+            script = revise_script(script, issues)
+            continue
 
         print("Senaryo tum kontrollerden basariyla gecti.\n")
         print(json.dumps(script, ensure_ascii=False, indent=2))

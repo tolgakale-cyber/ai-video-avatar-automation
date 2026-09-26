@@ -1,3 +1,6 @@
+import re
+
+
 def validate_script(script):
     errors = []
 
@@ -18,6 +21,10 @@ def validate_script(script):
         errors.append("Senaryo tam olarak 3 sahne içermeli.")
     else:
         for index, scene in enumerate(scenes, start=1):
+            if not isinstance(scene, dict):
+                errors.append(f"Sahne {index}: Geçerli bir nesne değil.")
+                continue
+
             if not scene.get("visual"):
                 errors.append(f"Sahne {index}: Görsel açıklaması eksik.")
 
@@ -27,9 +34,10 @@ def validate_script(script):
     if not script.get("closing"):
         errors.append("Kapanış metni eksik.")
 
-    # Tüm senaryoyu metne çevirerek yasaklı ifadeleri kontrol et
+    # Tüm senaryoyu metne çevir
     full_text = str(script)
 
+    # Yasaklı yer tutucuları kontrol et
     forbidden_placeholders = [
         "[Adınız]",
         "[Firma Adı]",
@@ -42,5 +50,18 @@ def validate_script(script):
             errors.append(
                 f"Yasaklı yer tutucu bulundu: {placeholder}"
             )
+
+    # Kaynaksız yüzde iddialarını kontrol et
+    percentage_pattern = r"%\s*\d+(?:[.,]\d+)?|\d+(?:[.,]\d+)?\s*%"
+
+    percentages = re.findall(percentage_pattern, full_text)
+
+    if percentages:
+        unique_percentages = list(dict.fromkeys(percentages))
+
+        errors.append(
+            "Kaynaksız yüzde veya istatistiksel iddia bulundu: "
+            + ", ".join(unique_percentages)
+        )
 
     return len(errors) == 0, errors
