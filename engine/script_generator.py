@@ -6,24 +6,41 @@ OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL = "qwen2.5:7b"
 
 
-def generate_script(topic):
+def generate_script(topic, feedback=None):
+    feedback_text = ""
+
+    if feedback:
+        feedback_text = f"""
+ÖNCEKİ DENEME REDDEDİLDİ.
+
+Tespit edilen sorunlar:
+{feedback}
+
+Yeni senaryoda bu sorunların hiçbirini tekrarlama.
+"""
+
     prompt = f"""
 Sen profesyonel bir kurumsal video senaryo yazarısın.
 
 KONU:
 {topic}
 
+{feedback_text}
+
 Yaklaşık 60-90 saniyelik profesyonel bir Türkçe video senaryosu hazırla.
 
 KURALLAR:
 - Doğal, akıcı ve doğru Türkçe kullan.
 - Tam olarak 3 sahne oluştur.
-- [Adınız], [Firma Adı] veya başka yer tutucular kullanma.
-- Kaynak verilmemiş yüzdeler, istatistikler, şirket isimleri veya araştırma sonuçları UYDURMA.
+- Köşeli parantezli hiçbir yer tutucu kullanma.
+- Adınız, Firma Adı, Şirket Adı veya Marka Adı gibi yer tutucular kullanma.
+- Gerçek olmayan şirket veya kişi isimleri uydurma.
+- Kaynak verilmemiş yüzdeler, istatistikler veya araştırma sonuçları uydurma.
 - Doğrulanmamış kesin sayısal iddialarda bulunma.
-- Gereksiz tekrar yapma.
-- Görsel açıklamaları kısa ve video üretimine uygun yaz.
-- Seslendirme metinleri profesyonel ve doğal olsun.
+- Giriş ile sahne anlatımlarını tekrar etme.
+- Görsel açıklamaları kısa, açık ve video üretimine uygun yaz.
+- Seslendirme metinlerini doğal ve profesyonel yaz.
+- Kapanış, videoyu özetleyen doğal bir son cümle olmalı.
 - Markdown kullanma.
 - Yalnızca geçerli JSON döndür.
 - JSON dışında hiçbir açıklama yazma.
@@ -70,6 +87,4 @@ JSON FORMATI:
     with urllib.request.urlopen(request) as response:
         result = json.loads(response.read().decode("utf-8"))
 
-    script = json.loads(result["response"])
-
-    return script
+    return json.loads(result["response"])
