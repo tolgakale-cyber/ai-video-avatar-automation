@@ -1,28 +1,28 @@
 from engine.quality_checker import check_quality
 
 
-bad_script = {
-    "title": "Yapay Zeka ve İş Dünyası",
-    "introduction": "Yapay zekanın iş dünyasında nasıl daha verimli hale gelmesi?",
+test_script = {
+    "title": "Yapay Zeka ile Verimlilik",
+    "introduction": "Günlük hayatta yapay zeka ne kadar yaygın ve faydalı olduğunu keşfedin.",
     "scenes": [
         {
-            "visual": "Çalışanlar bilgisayar kullanıyor.",
-            "narration": "Çalışma zorunluluğu, zaman yönetimi ve verimlilik arasındaki döngü."
+            "visual": "Bir ofiste çalışanlar yapay zeka destekli bir uygulama kullanıyor.",
+            "narration": "Yapay zekanın analiz ettiği veriler iş süreçlerini hızlandırıyor."
         },
         {
-            "visual": "Yapay zeka sistemi verileri analiz ediyor.",
-            "narration": "Örneğin, yapay zekanın verileri analiz etmesi ve raporlar oluşturması."
+            "visual": "Bir ekip bilgisayar ekranındaki raporları inceliyor.",
+            "narration": "Çalışanlar raporları inceleyerek daha hızlı kararlar alıyor."
         },
         {
-            "visual": "Çalışanlar raporlara bakıyor.",
-            "narration": "Yapay zeka ile işler daha iyi olması ve çalışanların daha hızlı karar vermesi."
+            "visual": "Bir hastanede doktor yapay zeka destekli bir sistemi kullanıyor.",
+            "narration": "Yapay zeka hastaların bilgilerini düzenlemeye yardımcı oluyor."
         }
     ],
-    "closing": "Bu, iş dünyasının geleceğinin nasıl şekillendiği bir göstergesidir."
+    "closing": "Yapay zeka günlük hayatta birçok alanda kullanılabiliyor."
 }
 
 
-result = check_quality(bad_script)
+result = check_quality(test_script)
 
 print("Critic sonucu:")
 print(result)

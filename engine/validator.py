@@ -50,7 +50,22 @@ def validate_script(script):
             errors.append(
                 f"Yasaklı yer tutucu bulundu: {placeholder}"
             )
+    # Firma A, Şirket B gibi uydurma şirket adlarını kontrol et
+    fake_company_pattern = r"\b(?:Firma|Şirket)\s+[A-ZÇĞİÖŞÜ]\b"
 
+    fake_companies = re.findall(
+        fake_company_pattern,
+        full_text,
+        flags=re.IGNORECASE
+    )
+
+    if fake_companies:
+        unique_companies = list(dict.fromkeys(fake_companies))
+
+        errors.append(
+            "Uydurma veya örnek şirket adı bulundu: "
+            + ", ".join(unique_companies)
+        )
     # Kaynaksız yüzde iddialarını kontrol et
     percentage_pattern = r"%\s*\d+(?:[.,]\d+)?|\d+(?:[.,]\d+)?\s*%"
 

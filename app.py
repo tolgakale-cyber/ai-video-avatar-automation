@@ -4,9 +4,37 @@ from engine.script_generator import generate_script
 from engine.validator import validate_script
 from engine.quality_checker import check_quality
 from engine.script_reviser import revise_script
-
+from engine.tts_generator import generate_speech
+from engine.text_quality import check_script_text_quality
 
 MAX_ATTEMPTS = 3
+
+
+def create_audio_files(script):
+    print("\nSeslendirmeler olusturuluyor...\n")
+
+    generate_speech(
+        script["introduction"],
+        "output/introduction.mp3"
+    )
+
+    for index, scene in enumerate(script["scenes"], start=1):
+        generate_speech(
+            scene["narration"],
+            f"output/scene_{index}.mp3"
+        )
+
+    generate_speech(
+        script["closing"],
+        "output/closing.mp3"
+    )
+
+    print("Seslendirmeler tamamlandi:")
+    print("- output/introduction.mp3")
+    print("- output/scene_1.mp3")
+    print("- output/scene_2.mp3")
+    print("- output/scene_3.mp3")
+    print("- output/closing.mp3")
 
 
 def main():
@@ -38,6 +66,26 @@ def main():
             continue
 
         print("Yapisal dogrulama basarili.")
+
+        # Turkce metin kalite kontrolu
+        text_issues = check_script_text_quality(script)
+
+        if text_issues:
+            print("Turkce metin kalite kontrolu basarisiz:")
+
+            for issue in text_issues:
+                print(f"- {issue}")
+
+            if attempt == MAX_ATTEMPTS:
+                print("\nMaksimum duzeltme sayisina ulasildi.")
+                return
+
+            print("\nTurkce kalite sorunlari Reviser'a gonderiliyor...")
+            print("Senaryo AI tarafindan duzeltiliyor...\n")
+
+            script = revise_script(script, text_issues)
+            continue
+
         print("AI kalite kontrolu yapiliyor...\n")
 
         quality = check_quality(script)
@@ -62,6 +110,9 @@ def main():
 
         print("Senaryo tum kontrollerden basariyla gecti.\n")
         print(json.dumps(script, ensure_ascii=False, indent=2))
+
+        create_audio_files(script)
+
         return
 
 

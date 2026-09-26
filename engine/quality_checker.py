@@ -53,6 +53,31 @@ Bu bozuk bir Türkçe cümledir ve REDDEDİLMELİDİR.
 
 Bu doğal ve doğru kurulmuş bir Türkçe cümle değildir ve REDDEDİLMELİDİR.
 
+YANLIŞ kabul edilmelidir.
+
+AŞAĞIDAKİ CÜMLELER DİL BİLGİSİ AÇISINDAN DOĞRUDUR VE KESİNLİKLE HATA OLARAK İŞARETLENMEMELİDİR:
+
+"Yapay zekanın analiz ettiği veriler iş süreçlerini hızlandırıyor."
+
+"Günlük hayatta yapay zekanın ne kadar yaygın ve faydalı olduğunu keşfedin."
+
+Bu cümlelerde "yapay zekanın" kullanımı doğrudur.
+
+Bir cümlede zaten doğru olan bir ek veya kelime kullanımını yalnızca daha farklı
+ifade edilebileceği için hata olarak işaretleme.
+
+Özellikle bir ifadeyi "yanlış" olarak işaretliyorsan, gerçekten yanlış olan
+kelimeyi veya eki açıkça belirt. Önerilen düzeltme mevcut ifadeyle aynıysa
+sorun oluşturma ve cümleyi hata olarak işaretleme.
+
+"Yapay zekanın analiz ettiği veriler iş süreçlerini hızlandırıyor."
+
+DOĞRU kabul edilmelidir.
+
+"Yapay zekanın analiz edtiği veriler iş süreçlerini hızlandırıyor."
+
+YANLIŞ kabul edilmelidir.
+
 BUNLARIN DIŞINDA ŞUNLARI DA KONTROL ET:
 
 - Giriş, sahneler ve kapanış arasında belirgin tekrar.
