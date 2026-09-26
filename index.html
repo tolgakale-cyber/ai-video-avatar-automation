@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Video Automation System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0d12;
+            color: #f5f5f5;
+            line-height: 1.7;
+        }
+
+        .container {
+            width: min(1100px, 90%);
+            margin: 0 auto;
+        }
+
+        header {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            background:
+                radial-gradient(circle at top, #252a38 0%, #0b0d12 55%);
+        }
+
+        .hero {
+            width: 100%;
+            padding: 80px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border: 1px solid #3c4354;
+            border-radius: 999px;
+            color: #b9c2d3;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: clamp(42px, 7vw, 78px);
+            line-height: 1.05;
+            margin: 0 auto 24px;
+            max-width: 900px;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0 auto 36px;
+            color: #aeb6c5;
+            font-size: 19px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .primary {
+            background: #f5f5f5;
+            color: #0b0d12;
+        }
+
+        .secondary {
+            border: 1px solid #3c4354;
+            color: #f5f5f5;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 90px 0;
+            border-top: 1px solid #20242e;
+        }
+
+        h2 {
+            font-size: 34px;
+            margin-top: 0;
+        }
+
+        .muted {
+            color: #aeb6c5;
+        }
+
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
+            margin-top: 35px;
+        }
+
+        .card {
+            background: #12151c;
+            border: 1px solid #262b37;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .card strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .tech span {
+            padding: 8px 12px;
+            background: #151922;
+            border: 1px solid #2a303d;
+            border-radius: 7px;
+            color: #c5ccda;
+        }
+
+        .video-box {
+            margin-top: 30px;
+            padding: 50px 25px;
+            text-align: center;
+            border: 1px dashed #3c4354;
+            border-radius: 12px;
+            background: #10131a;
+        }
+
+        footer {
+            padding: 45px 0;
+            text-align: center;
+            color: #778092;
+            border-top: 1px solid #20242e;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                min-height: auto;
+            }
+
+            .hero {
+                padding: 100px 0;
+            }
+
+            section {
+                padding: 65px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="container hero">
+        <div class="badge">AI AUTOMATION • PYTHON • LOCAL LLM</div>
+
+        <h1>Yapay Zekâ Destekli Video Otomasyonu</h1>
+
+        <p>
+            Bir konuyu otomatik olarak senaryoya, kalite kontrolünden geçmiş
+            seslendirmeye, ilgili stok görüntülere ve oynatılabilir final
+            videoya dönüştüren modüler yapay zekâ sistemi.
+        </p>
+
+        <div class="buttons">
+            <a class="button primary" href="#demo">
+                Videoyu İzle
+            </a>
+
+            <a class="button secondary"
+               href="https://github.com/tolgakale-cyber/ai-video-avatar-automation"
+               target="_blank">
+                GitHub'da İncele →
+            </a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<section>
+    <div class="container">
+        <h2>Proje Hakkında</h2>
+
+        <p class="muted">
+            Sistem, kullanıcıdan alınan konuyu Qwen tabanlı yerel yapay zekâ
+            modelleriyle yapılandırılmış bir video senaryosuna dönüştürür.
+            Senaryo doğrudan kullanılmak yerine otomatik doğrulama, Critic
+            ve Reviser aşamalarından geçirilir.
+        </p>
+
+        <p class="muted">
+            Onaylanan içerik Türkçe TTS ile seslendirilir. Her bölüm için
+            Pexels API üzerinden uygun stok video materyali alınır ve FFmpeg
+            kullanılarak ses ile görüntü normalize edilip tek bir final MP4
+            dosyasında birleştirilir.
+        </p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Otomasyon Pipeline'ı</h2>
+
+        <div class="pipeline">
+            <div class="card">
+                <strong>01 — Konu</strong>
+                Kullanıcının video konusu alınır.
+            </div>
+
+            <div class="card">
+                <strong>02 — AI Writer</strong>
+                Qwen 2.5 senaryo yapısını oluşturur.
+            </div>
+
+            <div class="card">
+                <strong>03 — Quality Control</strong>
+                Yapısal ve dil tabanlı kontroller uygulanır.
+            </div>
+
+            <div class="card">
+                <strong>04 — Critic & Reviser</strong>
+                Tespit edilen sorunlar AI tarafından yeniden düzenlenir.
+            </div>
+
+            <div class="card">
+                <strong>05 — TTS</strong>
+                Onaylanan metin Türkçe seslendirmeye dönüştürülür.
+            </div>
+
+            <div class="card">
+                <strong>06 — Pexels</strong>
+                Sahnelere uygun stok video materyalleri alınır.
+            </div>
+
+            <div class="card">
+                <strong>07 — FFmpeg</strong>
+                Ses ve görüntü akışları normalize edilir.
+            </div>
+
+            <div class="card">
+                <strong>08 — Final MP4</strong>
+                Sahne klipleri tek videoda birleştirilir.
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="demo">
+    <div class="container">
+        <h2>Üretilen Video</h2>
+
+        <p class="muted">
+            Aşağıdaki alan sistem tarafından uçtan uca oluşturulan örnek
+            çıktının gösterimi için ayrılmıştır.
+        </p>
+
+        <div class="video-box">
+            <strong>Demo video bir sonraki aşamada buraya eklenecek.</strong>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Teknolojiler</h2>
+
+        <div class="tech">
+            <span>Python</span>
+            <span>Ollama</span>
+            <span>Qwen 2.5 7B</span>
+            <span>Qwen 2.5 14B</span>
+            <span>Edge TTS</span>
+            <span>Pexels API</span>
+            <span>FFmpeg</span>
+            <span>JSON</span>
+            <span>Git</span>
+            <span>GitHub</span>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+        AI Video Automation System • Portfolio Project
+    </div>
+</footer>
+
+</body>
+</html>
