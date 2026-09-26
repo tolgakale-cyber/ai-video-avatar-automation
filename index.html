@@ -1,316 +1,667 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Yapay zeka destekli senaryo, kalite kontrolü, seslendirme, stok video seçimi ve final MP4 üretimini otomatikleştiren modüler video sistemi.">
+<title>Yapay Zeka Destekli Video Otomasyonu</title>
 
-    <title>AI Video Automation System</title>
+<style>
+:root{
+  --bg:#080b11;
+  --card:#11161f;
+  --card2:#0d121a;
+  --line:#27303c;
+  --text:#f1f4f8;
+  --muted:#a8b0bd;
+  --accent:#66f1be
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b0d12;
-            color: #f5f5f5;
-            line-height: 1.7;
-        }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif
+}
 
-        .container {
-            width: min(1100px, 90%);
-            margin: 0 auto;
-        }
+main{
+  max-width:1120px;
+  margin:auto;
+  padding:72px 28px 100px
+}
 
-        header {
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            background:
-                radial-gradient(circle at top, #252a38 0%, #0b0d12 55%);
-        }
+.eyebrow,.num{
+  color:var(--accent);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.14em
+}
 
-        .hero {
-            width: 100%;
-            padding: 80px 0;
-        }
+h1{
+  font-size:clamp(42px,7vw,76px);
+  line-height:1.02;
+  max-width:1000px;
+  margin:18px 0 24px;
+  letter-spacing:-.03em
+}
 
-        .badge {
-            display: inline-block;
-            padding: 8px 14px;
-            border: 1px solid #3c4354;
-            border-radius: 999px;
-            color: #b9c2d3;
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
+.lead{
+  color:var(--muted);
+  font-size:20px;
+  line-height:1.7;
+  max-width:860px
+}
 
-        h1 {
-            font-size: clamp(42px, 7vw, 78px);
-            line-height: 1.05;
-            margin: 0 auto 24px;
-            max-width: 900px;
-        }
+.tag{
+  display:inline-block;
+  margin-top:18px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#17352d;
+  color:var(--accent);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em
+}
 
-        .hero p {
-            max-width: 760px;
-            margin: 0 auto 36px;
-            color: #aeb6c5;
-            font-size: 19px;
-        }
+section{padding-top:76px}
 
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
+.section-head{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  gap:12px;
+  align-items:start;
+  margin-bottom:26px
+}
 
-        .button {
-            display: inline-block;
-            padding: 13px 22px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.2s;
-        }
+.section-head h2{
+  font-size:30px;
+  margin:0;
+  letter-spacing:-.02em
+}
 
-        .primary {
-            background: #f5f5f5;
-            color: #0b0d12;
-        }
+.section-head p{
+  grid-column:2;
+  color:var(--muted);
+  line-height:1.7;
+  max-width:820px;
+  margin:8px 0 0
+}
 
-        .secondary {
-            border: 1px solid #3c4354;
-            color: #f5f5f5;
-        }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px
+}
 
-        .button:hover {
-            transform: translateY(-2px);
-        }
+.grid.three{
+  grid-template-columns:repeat(3,1fr)
+}
 
-        section {
-            padding: 90px 0;
-            border-top: 1px solid #20242e;
-        }
+.card,.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:28px
+}
 
-        h2 {
-            font-size: 34px;
-            margin-top: 0;
-        }
+.card h3{
+  font-size:19px;
+  margin:0 0 12px
+}
 
-        .muted {
-            color: #aeb6c5;
-        }
+.card p,.card li,.panel p{
+  color:var(--muted);
+  line-height:1.65
+}
 
-        .pipeline {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-            gap: 14px;
-            margin-top: 35px;
-        }
+.card ul{
+  padding-left:20px;
+  margin-bottom:0
+}
 
-        .card {
-            background: #12151c;
-            border: 1px solid #262b37;
-            border-radius: 12px;
-            padding: 22px;
-        }
+.flow{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:30px;
+  overflow:auto
+}
 
-        .card strong {
-            display: block;
-            margin-bottom: 8px;
-        }
+.flow pre{
+  margin:0;
+  color:var(--accent);
+  font-size:14px;
+  line-height:1.85;
+  font-family:"SFMono-Regular",Consolas,monospace
+}
 
-        .tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 25px;
-        }
+.small{
+  font-size:13px;
+  color:var(--muted)
+}
 
-        .tech span {
-            padding: 8px 12px;
-            background: #151922;
-            border: 1px solid #2a303d;
-            border-radius: 7px;
-            color: #c5ccda;
-        }
+.accent{
+  color:var(--accent)
+}
 
-        .video-box {
-            margin-top: 30px;
-            padding: 50px 25px;
-            text-align: center;
-            border: 1px dashed #3c4354;
-            border-radius: 12px;
-            background: #10131a;
-        }
+.arch{
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr;
+  gap:14px;
+  align-items:center
+}
 
-        footer {
-            padding: 45px 0;
-            text-align: center;
-            color: #778092;
-            border-top: 1px solid #20242e;
-        }
+.node{
+  padding:22px 18px;
+  text-align:center;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px
+}
 
-        @media (max-width: 600px) {
-            header {
-                min-height: auto;
-            }
+.arrow{
+  color:var(--accent);
+  font-weight:900
+}
 
-            .hero {
-                padding: 100px 0;
-            }
+.github-btn{
+  display:inline-block;
+  margin-top:18px;
+  padding:12px 18px;
+  border:1px solid var(--accent);
+  border-radius:10px;
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:800;
+  font-size:14px;
+  transition:.2s
+}
 
-            section {
-                padding: 65px 0;
-            }
-        }
-    </style>
+.github-btn:hover{
+  background:var(--accent);
+  color:var(--bg)
+}
+
+.video-box{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:28px
+}
+
+.video-placeholder{
+  min-height:280px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border:1px dashed var(--line);
+  border-radius:14px;
+  color:var(--muted);
+  background:#070a0f
+}
+
+footer{
+  margin-top:90px;
+  padding-top:30px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px
+}
+
+@media(max-width:800px){
+  .grid,.grid.three{grid-template-columns:1fr}
+  .section-head{grid-template-columns:1fr}
+  .section-head p{grid-column:1}
+  .arch{grid-template-columns:1fr}
+  .arrow{transform:rotate(90deg);text-align:center}
+  main{padding:52px 20px 80px}
+}
+</style>
 </head>
 
 <body>
-
-<header>
-    <div class="container hero">
-        <div class="badge">AI AUTOMATION • PYTHON • LOCAL LLM</div>
-
-        <h1>Yapay Zekâ Destekli Video Otomasyonu</h1>
-
-        <p>
-            Bir konuyu otomatik olarak senaryoya, kalite kontrolünden geçmiş
-            seslendirmeye, ilgili stok görüntülere ve oynatılabilir final
-            videoya dönüştüren modüler yapay zekâ sistemi.
-        </p>
-
-        <div class="buttons">
-            <a class="button primary" href="#demo">
-                Videoyu İzle
-            </a>
-
-            <a class="button secondary"
-               href="https://github.com/tolgakale-cyber/ai-video-avatar-automation"
-               target="_blank">
-                GitHub'da İncele →
-            </a>
-        </div>
-    </div>
-</header>
-
 <main>
 
+<header>
+  <div class="eyebrow">AI VİDEO OTOMASYON PROJESİ · v1.0</div>
+
+  <h1>Yapay Zeka Destekli Video Otomasyonu</h1>
+
+  <p class="lead">
+    Bir konuyu; yerel yapay zeka modelleri, otomatik kalite kontrolü,
+    seslendirme, stok video seçimi ve FFmpeg tabanlı medya işleme
+    üzerinden oynatılabilir final videoya dönüştüren modüler otomasyon sistemi.
+  </p>
+
+  <span class="tag">YEREL AI · TTS · PEXELS · FFmpeg · MP4</span>
+
+  <br>
+
+  <a class="github-btn" href="#demo">
+    Videoyu İzle ↓
+  </a>
+
+  <a class="github-btn"
+     href="https://github.com/tolgakale-cyber/ai-video-avatar-automation"
+     target="_blank"
+     rel="noopener noreferrer">
+    GitHub'da İncele →
+  </a>
+</header>
+
+
 <section>
-    <div class="container">
-        <h2>Proje Hakkında</h2>
+  <div class="section-head">
+    <div class="num">01</div>
 
-        <p class="muted">
-            Sistem, kullanıcıdan alınan konuyu Qwen tabanlı yerel yapay zekâ
-            modelleriyle yapılandırılmış bir video senaryosuna dönüştürür.
-            Senaryo doğrudan kullanılmak yerine otomatik doğrulama, Critic
-            ve Reviser aşamalarından geçirilir.
-        </p>
-
-        <p class="muted">
-            Onaylanan içerik Türkçe TTS ile seslendirilir. Her bölüm için
-            Pexels API üzerinden uygun stok video materyali alınır ve FFmpeg
-            kullanılarak ses ile görüntü normalize edilip tek bir final MP4
-            dosyasında birleştirilir.
-        </p>
+    <div>
+      <h2>Projeye Genel Bakış</h2>
+      <p>
+        Proje, bir video fikrinden yayınlanabilir medya çıktısına kadar
+        tekrar eden üretim adımlarını ayrı katmanlara bölerek otomatikleştirir.
+      </p>
     </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Problem</h3>
+      <p>
+        AI ile yalnızca metin üretmek, kullanılabilir bir video oluşturmak
+        için yeterli değildir. Senaryo kontrolü, seslendirme, uygun görüntü
+        seçimi ve medya işleme gibi ek aşamalar gerekir.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Yaklaşım</h3>
+      <p>
+        Senaryo üretimi, doğrulama, AI kalite kontrolü, revizyon,
+        TTS, stok video seçimi ve FFmpeg işlemleri ayrı bileşenler
+        olarak çalıştırılır.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Amaç</h3>
+      <p>
+        Tek bir konu girdisinden mümkün olduğunca az manuel müdahaleyle
+        tutarlı ve tekrar üretilebilir bir video pipeline'ı oluşturmak.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Çıktı</h3>
+      <p>
+        Normalize edilmiş video ve ses akışlarından oluşturulan,
+        oynatılabilir bir final MP4 dosyası.
+      </p>
+    </div>
+  </div>
 </section>
 
+
 <section>
-    <div class="container">
-        <h2>Otomasyon Pipeline'ı</h2>
+  <div class="section-head">
+    <div class="num">02</div>
 
-        <div class="pipeline">
-            <div class="card">
-                <strong>01 — Konu</strong>
-                Kullanıcının video konusu alınır.
-            </div>
-
-            <div class="card">
-                <strong>02 — AI Writer</strong>
-                Qwen 2.5 senaryo yapısını oluşturur.
-            </div>
-
-            <div class="card">
-                <strong>03 — Quality Control</strong>
-                Yapısal ve dil tabanlı kontroller uygulanır.
-            </div>
-
-            <div class="card">
-                <strong>04 — Critic & Reviser</strong>
-                Tespit edilen sorunlar AI tarafından yeniden düzenlenir.
-            </div>
-
-            <div class="card">
-                <strong>05 — TTS</strong>
-                Onaylanan metin Türkçe seslendirmeye dönüştürülür.
-            </div>
-
-            <div class="card">
-                <strong>06 — Pexels</strong>
-                Sahnelere uygun stok video materyalleri alınır.
-            </div>
-
-            <div class="card">
-                <strong>07 — FFmpeg</strong>
-                Ses ve görüntü akışları normalize edilir.
-            </div>
-
-            <div class="card">
-                <strong>08 — Final MP4</strong>
-                Sahne klipleri tek videoda birleştirilir.
-            </div>
-        </div>
+    <div>
+      <h2>Sistem Mimarisi</h2>
+      <p>
+        Yapay zeka üretimi ile medya işleme birbirinden ayrılır.
+        Her aşama kendi görevini tamamlayarak bir sonraki katmana veri aktarır.
+      </p>
     </div>
+  </div>
+
+  <div class="flow">
+<pre>KONU
+  │
+  ▼
+QWEN 2.5 · AI WRITER
+  │
+  ▼
+YAPISAL DOĞRULAMA
+  │
+  ▼
+AI CRITIC
+  │
+  ├── sorun varsa ──► AI REVISER ──┐
+  │                                │
+  ◄────────────────────────────────┘
+  │
+  ▼
+EDGE TTS
+  │
+  ▼
+PEXELS VIDEO API
+  │
+  ▼
+FFmpeg SAHNE ÜRETİMİ
+  │
+  ▼
+NORMALİZE EDİLMİŞ KLİPLER
+  │
+  ▼
+FINAL MP4</pre>
+  </div>
 </section>
+
+
+<section>
+  <div class="section-head">
+    <div class="num">03</div>
+
+    <div>
+      <h2>AI Üretim ve Kalite Döngüsü</h2>
+      <p>
+        Sistem ilk AI çıktısını doğrudan videoya dönüştürmez.
+        Senaryo üretimden sonra birden fazla kontrol aşamasından geçer.
+      </p>
+    </div>
+  </div>
+
+  <div class="arch">
+    <div class="node">
+      <strong>Writer</strong><br>
+      <span class="small">senaryo üretimi</span>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="node">
+      <strong>Critic</strong><br>
+      <span class="small">kalite kontrolü</span>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="node">
+      <strong>Reviser</strong><br>
+      <span class="small">otomatik düzeltme</span>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="section-head">
+    <div class="num">04</div>
+
+    <div>
+      <h2>Senaryo Sistemi</h2>
+      <p>
+        Qwen 2.5 7B modeli video konusunu yapılandırılmış senaryoya
+        dönüştürür. JSON yapısı giriş, üç ana sahne ve kapanış bölümlerini
+        ayrı alanlarda tutar.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Yapısal Doğrulama</h3>
+      <p>
+        Python katmanı gerekli alanları, sahne sayısını ve beklenen veri
+        yapısını kontrol eder.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>İçerik Kuralları</h3>
+      <p>
+        Placeholder içerikler, uydurma şirket ve kişi adları,
+        kaynaksız istatistikler ve belirli hatalı içerik biçimleri
+        filtrelenir.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>AI Critic</h3>
+      <p>
+        Qwen 2.5 14B; başlık, giriş, sahne anlatımları,
+        görsel açıklamaları ve kapanışı kalite açısından ayrı ayrı inceler.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>AI Reviser</h3>
+      <p>
+        Critic sorun tespit ettiğinde geri bildirim Writer/Reviser
+        katmanına aktarılır ve senaryo otomatik olarak yeniden düzenlenir.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="section-head">
+    <div class="num">05</div>
+
+    <div>
+      <h2>Seslendirme</h2>
+      <p>
+        Kalite kontrolünden geçen senaryo Edge TTS üzerinden Türkçe
+        ses dosyalarına dönüştürülür.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Türkçe TTS</h3>
+      <p>
+        Sistem mevcut sürümde <span class="accent">tr-TR-AhmetNeural</span>
+        sesini kullanarak giriş, sahneler ve kapanış için ayrı ses
+        dosyaları oluşturur.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Sahne Bazlı Üretim</h3>
+      <p>
+        Her ses bölümünün süresi FFprobe ile ölçülür ve ilgili video
+        klibinin hedef süresi buna göre belirlenir.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="section-head">
+    <div class="num">06</div>
+
+    <div>
+      <h2>Pexels Video Entegrasyonu</h2>
+      <p>
+        Senaryodaki görsel açıklamalar, stok video araması için sorgu
+        olarak kullanılır.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Otomatik Arama</h3>
+      <p>
+        Pexels Video API üzerinden sahneyle ilişkili yatay video
+        materyalleri aranır.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Klip Seçimi</h3>
+      <p>
+        Sistem ses süresini dikkate alır ve kullanılabilir video
+        kaynakları arasından uygun medya dosyasını indirir.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="section-head">
+    <div class="num">07</div>
+
+    <div>
+      <h2>FFmpeg Video Motoru</h2>
+      <p>
+        Farklı kaynaklardan gelen medya dosyaları final birleştirme
+        öncesinde ortak teknik özelliklere normalize edilir.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid three">
+    <div class="card">
+      <h3>1280 × 720</h3>
+      <p>Video görüntüsü ortak HD çözünürlüğe ölçeklenir ve kırpılır.</p>
+    </div>
+
+    <div class="card">
+      <h3>30 FPS</h3>
+      <p>
+        Kare zamanlaması yeniden oluşturularak sahneler sabit kare
+        hızında üretilir.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>AAC Audio</h3>
+      <p>
+        Ses akışı normalize edilerek final video ile uyumlu hale getirilir.
+      </p>
+    </div>
+  </div>
+</section>
+
 
 <section id="demo">
-    <div class="container">
-        <h2>Üretilen Video</h2>
+  <div class="section-head">
+    <div class="num">08</div>
 
-        <p class="muted">
-            Aşağıdaki alan sistem tarafından uçtan uca oluşturulan örnek
-            çıktının gösterimi için ayrılmıştır.
-        </p>
-
-        <div class="video-box">
-            <strong>Demo video bir sonraki aşamada buraya eklenecek.</strong>
-        </div>
+    <div>
+      <h2>Demo ve Final Çıktı</h2>
+      <p>
+        Sistem tarafından uçtan uca üretilen örnek video bu bölümde
+        gösterilecektir.
+      </p>
     </div>
+  </div>
+
+  <div class="video-box">
+    <div class="video-placeholder">
+      <div>
+        <strong class="accent">FINAL VIDEO</strong>
+        <p>
+          Demo MP4 dosyası bir sonraki aşamada bu alana eklenecek.
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
+
 
 <section>
-    <div class="container">
-        <h2>Teknolojiler</h2>
+  <div class="section-head">
+    <div class="num">09</div>
 
-        <div class="tech">
-            <span>Python</span>
-            <span>Ollama</span>
-            <span>Qwen 2.5 7B</span>
-            <span>Qwen 2.5 14B</span>
-            <span>Edge TTS</span>
-            <span>Pexels API</span>
-            <span>FFmpeg</span>
-            <span>JSON</span>
-            <span>Git</span>
-            <span>GitHub</span>
-        </div>
+    <div>
+      <h2>Teknoloji Katmanı</h2>
+      <p>
+        Proje, yerel AI üretimi ile klasik medya işleme araçlarını
+        tek bir Python workflow'unda birleştirir.
+      </p>
     </div>
+  </div>
+
+  <div class="grid three">
+    <div class="card">
+      <h3>Python</h3>
+      <p>Orkestrasyon ve otomasyon katmanı.</p>
+    </div>
+
+    <div class="card">
+      <h3>Ollama</h3>
+      <p>Yerel LLM modellerinin çalıştırılması.</p>
+    </div>
+
+    <div class="card">
+      <h3>Qwen 2.5</h3>
+      <p>Writer, Critic ve Reviser görevleri.</p>
+    </div>
+
+    <div class="card">
+      <h3>Edge TTS</h3>
+      <p>Türkçe seslendirme üretimi.</p>
+    </div>
+
+    <div class="card">
+      <h3>Pexels API</h3>
+      <p>Stok video materyali sağlama katmanı.</p>
+    </div>
+
+    <div class="card">
+      <h3>FFmpeg</h3>
+      <p>Video, ses, zamanlama ve final MP4 üretimi.</p>
+    </div>
+  </div>
 </section>
 
-</main>
+
+<section>
+  <div class="section-head">
+    <div class="num">10</div>
+
+    <div>
+      <h2>Mevcut Durum</h2>
+      <p>
+        v1, çalışan uçtan uca video üretim pipeline'ını içerir.
+        Bu sayfada yalnızca mevcut sürümde gerçekten çalışan
+        özellikler listelenmektedir.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>v1 · Tamamlananlar</h3>
+      <ul>
+        <li>Qwen tabanlı senaryo üretimi</li>
+        <li>Yapısal doğrulama</li>
+        <li>AI Critic kalite kontrolü</li>
+        <li>AI Reviser düzeltme döngüsü</li>
+        <li>Türkçe Edge TTS seslendirme</li>
+        <li>Pexels Video API entegrasyonu</li>
+        <li>FFmpeg sahne normalizasyonu</li>
+        <li>Otomatik final MP4 üretimi</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Proje Prensibi</h3>
+      <p>
+        AI modelleri içerik üretimi ve kalite kontrolünden sorumluyken,
+        Python workflow'u süreç yönetimini; FFmpeg ise deterministik
+        medya üretimini gerçekleştirir.
+      </p>
+    </div>
+  </div>
+</section>
+
 
 <footer>
-    <div class="container">
-        AI Video Automation System • Portfolio Project
-    </div>
+  Yapay Zeka Destekli Video Otomasyonu · v1.0 · Türkçe teknik proje incelemesi
 </footer>
 
+</main>
 </body>
 </html>
