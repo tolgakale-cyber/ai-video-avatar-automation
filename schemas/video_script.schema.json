@@ -1,0 +1,33 @@
+{
+  "title": "Video Script",
+  "type": "object",
+  "required": ["title", "introduction", "scenes", "closing"],
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "introduction": {
+      "type": "string"
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["visual", "narration"],
+        "properties": {
+          "visual": {
+            "type": "string"
+          },
+          "narration": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "closing": {
+      "type": "string"
+    }
+  }
+}

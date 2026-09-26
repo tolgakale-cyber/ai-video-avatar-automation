@@ -1,0 +1,16 @@
+# Python gecici dosyalari
+__pycache__/
+*.pyc
+
+# Uretilen video ve medya dosyalari
+output/
+
+# Sanal ortam
+.venv/
+venv/
+
+# Editor / Windows
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
