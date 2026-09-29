@@ -1,18 +1,10 @@
-\# AI Video Automation System
+# AI Video Automation System
 
+Kullanıcının verdiği bir konudan başlayarak yapay zekâ destekli senaryo üretimi, yapısal doğrulama, kalite kontrolü, revizyon, seslendirme, stok video seçimi ve final video oluşturma süreçlerini otomatikleştiren modüler Python projesi.
 
+## Proje Hakkında
 
-Kullanıcının verdiği bir konudan başlayarak yapay zekâ destekli senaryo üretimi, kalite kontrolü, seslendirme, stok video seçimi ve final video oluşturma süreçlerini otomatikleştiren modüler Python projesi.
-
-
-
-\## Proje Hakkında
-
-
-
-Sistem, girilen video konusunu yapılandırılmış bir senaryoya dönüştürür. Oluşturulan içerik otomatik kalite kontrolünden geçirilir ve gerekli durumlarda yeniden düzenlenir.
-
-
+Sistem, girilen video konusunu yapılandırılmış bir senaryoya dönüştürür. Oluşturulan içerik otomatik kalite kontrolünden geçirilir ve gerekli durumlarda Critic → Reviser döngüsü üzerinden yeniden düzenlenir.
 
 Onaylanan senaryo seslendirilir, sahnelere uygun stok videolar Pexels API üzerinden alınır ve FFmpeg kullanılarak ses ile görüntü birleştirilir. Sürecin sonunda oynatılabilir bir MP4 video otomatik olarak oluşturulur.
 
