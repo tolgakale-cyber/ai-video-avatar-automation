@@ -10,7 +10,7 @@ Onaylanan senaryo seslendirilir, sahnelere uygun stok videolar Pexels API üzeri
 
 
 
-\## Pipeline
+## Pipeline
 
 
 
@@ -50,31 +50,31 @@ Final MP4
 
 
 
-\## Kullanılan Teknolojiler
+## Kullanılan Teknolojiler
 
 
 
-\- Python
+- Python
 
-\- Ollama
+- Ollama
 
-\- Qwen 2.5 7B
+- Qwen 2.5 7B
 
-\- Qwen 2.5 14B
+- Qwen 2.5 14B
 
-\- Edge TTS
+- Edge TTS
 
-\- Pexels API
+- Pexels API
 
-\- FFmpeg
+- FFmpeg
 
-\- JSON tabanlı yapılandırılmış senaryo sistemi
+- JSON tabanlı yapılandırılmış senaryo sistemi
 
-\- Git / GitHub
+- Git / GitHub
 
 
 
-\## AI Kalite Kontrolü
+## AI Kalite Kontrolü
 
 
 
@@ -90,7 +90,7 @@ Bu döngü, kabul edilebilir bir çıktı elde edilene veya maksimum deneme say�
 
 
 
-\## Video Üretimi
+## Video Üretimi
 
 
 
@@ -102,7 +102,7 @@ Her bölüm için Pexels üzerinden uygun video materyali alınır. FFmpeg ile v
 
 
 
-\## Çıktı
+## Çıktı
 
 
 
@@ -110,7 +110,7 @@ Sistem çalıştırıldığında final video:
 
 
 
-`output/final\_video.mp4`
+`output/final_video.mp4`
 
 
 
@@ -118,7 +118,7 @@ olarak oluşturulur.
 
 
 
-\## Durum
+## Durum
 
 
 
